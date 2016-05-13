@@ -46,26 +46,28 @@ function reRender(){
 	let selectedCellsAndGrids = [];
 	for (let j = 0; j < selectedCells.length; j++){
 		let c = selectedCells[j];
+		//selectedCellsAndGrids.push({coords: c.dataset.coords, x: [], y : []});
+		let tempC = {coords: c.dataset.coords, x: [], y : []};
 		for(let i = 0; i < bottomGridCells.length; i++){
-			let gridX = bottomGridCells[i].dataset.coords.split('_')[0];
+			let [gridX, gridY] = bottomGridCells[i].dataset.coords.split('_');
 			
 			if(gridX === c.dataset.coords.split('_')[0]){
 				console.log('is selected bottom -> ' + bottomGridCells[i].dataset.coords);
-			}
-				
+				tempC.x.push(gridY);
+			}	
 		}
-	}
-    
-	
-    
-	for(let j = 0; j < selectedCells.length; j++){
-		let c = selectedCells[j];
 		for(let i = 0; i < mainRightGridCells.length; i++){
-			let gridY = mainRightGridCells[i].dataset.coords.split('_')[1];
+			let [gridX, gridY] = mainRightGridCells[i].dataset.coords.split('_');
 			if(gridY == c.dataset.coords.split('_')[1]){
 				console.log('is selected main right -> ' + mainRightGridCells[i].dataset.coords);
+				tempC.y.push(gridX);
 			}
 		}
+		selectedCellsAndGrids.push(tempC);
+		console.log(selectedCellsAndGrids);
+	}
+	for(let i = 0; i < selectedCellsAndGrids.length; i++){
+		//TODO: finish off
 	}
     
 }
