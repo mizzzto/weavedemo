@@ -16,12 +16,13 @@ function initGrid(rowWidth, colHeight, div){
             cell.className = 'cell';
             cell.dataset.grid = div;
             cell.dataset.coords = i + '_' + j;
+			cell.dataset.selected = "0";
             if(div !== 'main'){
                 cell.addEventListener('click', function(e) {
-                    console.log(e.target.className);
                     var message = 'cell: ' + e.target.dataset.coords;
                     this.className = e.target.className == "cell" ? "cell isSelected" : "cell";
-                    populateAll(e.target.dataset.grid, e.target.dataset.coords);
+					this.dataset.selected = e.target.dataset.selected === "0" ? "1" : "0";
+                    reRender();
                     console.log(this);
                 }, false);
             }
@@ -31,45 +32,42 @@ function initGrid(rowWidth, colHeight, div){
     } 
 }
 
-function populateAll(source, coords){
-    switch(source){
-        case 'bottom-right':
-            console.log('bottom right clicked: ' + coords);
-            let [x,y] = coords.split('_');
-            console.log('x: ' + x + ', y: ' + y);
-            reRenderPedal(x,y);
-            break;
-        case 'bottom':
-            console.log('bottom clicked: ' + coords);
-            break;
-        case 'main-right':
-            console.log('main right clicked: ' + coords);
-            break;
-        default:
-            console.log('hit and miss');
-    }
-}
-
-function reRenderPedal(x,y){
-    let bottomGrid = document.getElementById('bottom');
-    let bottomGridCells = bottomGrid.children;
-    for(let i = 0; i < bottomGridCells.length; i++){
-        if(bottomGridCells[i].className == "cell isSelected"){
-            let gridX = bottomGridCells[i].dataset.coords.split('_')[0];
-            if(gridX == x)
-                console.log('is selected bottom -> ' + bottomGridCells[i].dataset.coords);
-        }
-    }
-    let mainRightGrid = document.getElementById('main-right');
-    let mainRightGridCells = mainRightGrid.children;
-    for(let i = 0; i < mainRightGridCells.length; i++){
-        if(mainRightGridCells[i].className == "cell isSelected"){
-            let gridY = mainRightGridCells[i].dataset.coords.split('_')[1];
-            if(gridY == y){
-                console.log('is selected main right -> ' + mainRightGridCells[i].dataset.coords);
-            }
-        }
-    }
+function reRender(){
+	let selectedCells = [].slice.call(document.getElementById('bottom-right').children).filter(function(item,index,array){
+		return item.dataset.selected == "1";
+	});
+	let bottomGridCells = Array.prototype.slice.call(document.getElementById('bottom').children).filter(function(item,index,array){
+		return item.dataset.selected === "1";
+	});
+	let mainRightGridCells = Array.prototype.slice.call(document.getElementById('main-right').children).filter(function(item,index,array){
+		return item.dataset.selected === "1";
+	});
+	//console.log('Start to iterate through selected cells');
+	let selectedCellsAndGrids = [];
+	for (let j = 0; j < selectedCells.length; j++){
+		let c = selectedCells[j];
+		for(let i = 0; i < bottomGridCells.length; i++){
+			let gridX = bottomGridCells[i].dataset.coords.split('_')[0];
+			
+			if(gridX === c.dataset.coords.split('_')[0]){
+				console.log('is selected bottom -> ' + bottomGridCells[i].dataset.coords);
+			}
+				
+		}
+	}
+    
+	
+    
+	for(let j = 0; j < selectedCells.length; j++){
+		let c = selectedCells[j];
+		for(let i = 0; i < mainRightGridCells.length; i++){
+			let gridY = mainRightGridCells[i].dataset.coords.split('_')[1];
+			if(gridY == c.dataset.coords.split('_')[1]){
+				console.log('is selected main right -> ' + mainRightGridCells[i].dataset.coords);
+			}
+		}
+	}
+    
 }
 
 function init(){
