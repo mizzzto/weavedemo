@@ -23,7 +23,6 @@ function initGrid(rowWidth, colHeight, div){
                     this.className = e.target.className == "cell" ? "cell isSelected" : "cell";
 					this.dataset.selected = e.target.dataset.selected === "0" ? "1" : "0";
                     reRender();
-                    console.log(this);
                 }, false);
             }
             
@@ -34,7 +33,7 @@ function initGrid(rowWidth, colHeight, div){
 
 function reRender(){
 	let selectedCells = [].slice.call(document.getElementById('bottom-right').children).filter(function(item,index,array){
-		return item.dataset.selected == "1";
+		return item.dataset.selected === "1";
 	});
 	let bottomGridCells = Array.prototype.slice.call(document.getElementById('bottom').children).filter(function(item,index,array){
 		return item.dataset.selected === "1";
@@ -66,12 +65,35 @@ function reRender(){
 		selectedCellsAndGrids.push(tempC);
 		console.log(selectedCellsAndGrids);
 	}
+    
+    let mainGrid = document.getElementById('main');
+    let mainGridCells = [].slice.call(mainGrid.children);
+    setAll(mainGridCells, "cell");
 	for(let i = 0; i < selectedCellsAndGrids.length; i++){
 		//TODO: finish off
+        let row = selectedCellsAndGrids[i];
+        for(let j = 0; j < row.x.length; j++){
+            for(let k = 0; k < row.y.length; k++){
+                console.log('it x: ' + row.x[j] + ', y: ' + row.y[k]);
+                let cells = mainGridCells.filter(function(item,index,array){
+                    return item.dataset.coords === row.y[k] + '_' + row.x[j];
+                });
+                console.log('found: ');
+                console.log(cells[0]);
+                if(cells[0] !== null){
+                    cells[0].className = "cell isSelected";
+                }
+            }
+        }
 	}
     
 }
-
+function setAll(a, v) {
+    var i, n = a.length;
+    for (i = 0; i < n; ++i) {
+        a[i].className = v;
+    }
+}
 function init(){
     initGrid(WIDTH, HEIGHT, 'main');
     initGrid(PEDAL_WIDTH, HEIGHT, 'main-right');
