@@ -5,6 +5,7 @@ body {
 	margin: 0px;
     padding: 0px;
     font-size: 0;
+
 }
 .main{
     display: inline-block;
@@ -25,21 +26,20 @@ body {
 }
 .bottom-right{
     display: inline-block;
-    border-style: solid;
-    border-width: 0px 1px 1px 0px;
     margin-left: 20px;
     margin-top: 20px;
+    border-style: solid;
+    border-width: 0px 1px 1px 0px;
 }
 
 .cell {
     display: inline-block;
-    /*width: 18px;
-    height: 18px;*/
     border-style: solid;
     border-width: 1px 0px 0px 1px;
 }
+
 .isSelected {
-    background-color: red;
+    background-color: purple;
 }
 .text{
 
